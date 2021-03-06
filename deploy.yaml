@@ -1,0 +1,37 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: email-parser
+  name: email-parser
+spec:
+  ports:
+  - nodePort: 31800
+    port: 8080
+    protocol: TCP
+    targetPort: 8080
+  selector:
+    app: email-parser
+  type: NodePort
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: email-parser
+  name: email-parser
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: email-parser
+  template:
+    metadata:
+      labels:
+        app: email-parser
+    spec:
+      containers:
+      - name: email-parser
+        image: dgurutester/email-parser:latest
+      restartPolicy: Always
+
